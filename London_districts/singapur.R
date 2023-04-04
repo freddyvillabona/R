@@ -75,12 +75,35 @@ A <- ggplot() +
   #geom_sf_text(aes(label = NAME), size=4)+
   # geom_label(aes(fill = Ucraniano), colour = "white", fontface = "bold") +
   #theme_void() +
-   geom_sf(data=points, size=.001, color="black") +
+   geom_sf(data=pnts_trans, size=.2, color="black") +
  # geom_sf(data=pnts_trans, size=.001, color="black") +
  # geom_sf(data=points, size=90, size=.001,color="#FCE5B5", alpha=.4) +
   theme(plot.title = element_text(size = 16),
         plot.subtitle = element_text(size = 20)) +
-  labs(fill= "Districts")
+  labs(fill= "Districts") +
+  theme_void() +
+  labs(title="\nThefts reported in London", 
+       subtitle = "",
+       caption = "Datos: Anónimo (2023)\n",
+       fill= "Districts") +
+  theme(
+    axis.text.x = element_blank(), 
+    axis.ticks.x = element_blank(),
+    panel.spacing = unit(0, "pt"),
+    panel.border = element_blank(),
+    panel.grid.major.x = element_blank(),
+    strip.background = element_blank(),
+    strip.text = element_text(colour = "black"),
+    legend.position = c(.18, .27),
+    legend.justification = c("right", "top"),
+    legend.box.just = "right",
+    legend.margin = margin(6, 6, 6, 6),
+    plot.title = element_text(size = 20, face="bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 16, face="bold", hjust = 0.5),
+    plot.caption = element_text(size = 10, face="bold", hjust = 1),
+    panel.background = element_rect(fill = "white", colour = "white")
+  )
+
 
 A
 
@@ -95,27 +118,55 @@ library(viridis)
 ta$Var1 <- as.character(ta$Var1)
 ta <- ta[with(ta, order(-ta$Freq)), ]
   
+ta$Var1 <- gsub("Further/Higher Educational Building",
+                "Further", ta$Var1)
+ta$Var1 <- gsub("Sports/Recreation Area",
+                "Recreation Area", ta$Var1)
 
-b <- ggplot(ta, aes(y= reorder(Var1,Freq) , x=Freq, fill=Var1)) +
-  geom_bar(stat = "identity") +
+
+
+b <- ggplot(ta, aes(y= reorder(Var1,Freq) , x=Freq)) +
+  geom_bar(stat = "identity", fill="gray60", color="gray40") +
+  ylab("") +
+  xlab("Reported cases") +
   #scale_fill_manual() +
-  theme(legend.position='none')
+  labs(fill= "Districts") +
+  #theme_void() +
+  labs(title="\nTitle", 
+       fill= "Districts") +
+  theme(
+    legend.position='none',
+    #axis.text.x = element_blank(), 
+    #axis.ticks.x = element_blank(),
+   # panel.spacing = unit(0, "pt"),
+    #panel.border = element_blank(),
+    #panel.grid.major.x = element_blank(),
+    #strip.background = element_blank(),
+   # strip.text = element_text(colour = "black"),
+    #legend.box.just = "right",
+    #legend.margin = margin(6, 6, 6, 6),
+    plot.title = element_text(size = 20, face="bold", hjust = 0),
+    plot.subtitle = element_text(size = 16, face="bold", hjust = 0.5),
+    plot.caption = element_text(size = 10, face="bold", hjust = 1),
+    panel.background = element_rect(fill = "white", colour = "white")
+  )
+  
 
+b
 
+#library("patchwork")
 
-library("patchwork")
-
-A / b
+#A / b
 
 
 library("cowplot")
 ggdraw() +
   draw_plot(A, x = 0, y = 0, width = 1, height = 1) +
-  draw_plot(b, x = 0.5, y = .5, width = .3, height = .3) 
+  draw_plot(b, x = 0.45, y = .28, width = .2, height = .4) 
 
 
 
-x = c(0, 0.5, 0), y = c(1, 1, 0.5))
+
 
 
 
